@@ -47,11 +47,16 @@ public class Controller {
 			}
 
 		});
+
+
 		Painter p = painters.get(selectedIndex);
+
 		image.setImage(new Image(p.getCurrentPainting()));
 		image.setPreserveRatio(true);
         image.setSmooth(true);
         image.setCache(true);
+
+        description.setText(p.getCurrentDescription());
 	}
 
 	/*
@@ -66,16 +71,27 @@ public class Controller {
 			links.remove(links.size()-1);
 			for(Element link:links){
 				String painterName = link.text();
+				if(painterName.equals("Matejko, Jan")){
+					/*
+					 * POMIJAM Z UWAGI NA ODMIENNIE SKONSTRUOWANA PODSTRONE
+					 */
+					continue;
+				}
 				cb.getItems().add(painterName);
 				String suburl = link.absUrl("href");
 				Document subdoc = Jsoup.connect(suburl).get();
-				Elements images = subdoc.select("img[src]");
-				//to do
-				//Elements descriptions = subdoc.select("td");
+				Element table = subdoc.select("table").first();
+				Elements images = table.select("td");
 
 				Painter p = new Painter(painterName);
 				for(Element image:images){
-					p.addPainting(image.absUrl("src"));
+					if(image.toString().contains("src")){
+						Elements test = image.select("a");
+						p.addPainting(test.attr("abs:href"));
+					}else if(image.toString().contains("font") && !image.toString().contains("href")){
+						System.out.println(image.text());
+						p.addDescription(image.text());
+					}
 				}
 				painters.add(p);
 			}
@@ -87,6 +103,7 @@ public class Controller {
 	    cb.getSelectionModel().selectFirst();
 	}
 
+
 	@FXML
 	private void getNextImage(){
 		Painter p = painters.get(selectedIndex);
@@ -94,6 +111,8 @@ public class Controller {
 		image.setPreserveRatio(true);
         image.setSmooth(true);
         image.setCache(true);
+
+        description.setText(p.getNextDescription());
 	}
 
 	@FXML
@@ -103,6 +122,8 @@ public class Controller {
 		image.setPreserveRatio(true);
         image.setSmooth(true);
         image.setCache(true);
+
+        description.setText(p.getPreviousDescription());
 	}
 
 	private void changePainter(){
@@ -112,5 +133,8 @@ public class Controller {
 		image.setPreserveRatio(true);
         image.setSmooth(true);
         image.setCache(true);
+
+        description.setText(p.getCurrentDescription());
 	}
+
 }

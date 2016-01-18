@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
@@ -12,18 +13,15 @@
       <HBox BorderPane.alignment="CENTER">
          <children>
             <ChoiceBox fx:id="cb" maxWidth="1.7976931348623157E308" prefWidth="200.0" />
-            <Button fx:id="previous" mnemonicParsing="false" onAction="#getPreviousImage" onMouseClicked="#getPreviousImage" text="Previous" />
-            <Button fx:id="next" mnemonicParsing="false" onAction="#getNextImage" onMouseClicked="#getNextImage" text="Next" />
+            <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#getPreviousImage" text="Previous" />
+            <Button fx:id="next" mnemonicParsing="false" onMouseClicked="#getNextImage" text="Next" />
          </children>
       </HBox>
    </top>
-   <center>
-      <ImageView fx:id="image" fitHeight="350.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <viewport>
-            <Rectangle2D />
-         </viewport></ImageView>
-   </center>
    <bottom>
       <Label fx:id="description" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" BorderPane.alignment="CENTER" />
    </bottom>
+   <center>
+      <ImageView fx:id="image" fitHeight="360.0" fitWidth="601.0" onSwipeLeft="#getNextImage" onSwipeRight="#getPreviousImage" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>
